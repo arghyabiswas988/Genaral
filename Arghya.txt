@@ -230,7 +230,7 @@ cd R01:
 
 $MachineName = 'DeviceName'
 
-(Get-WmiObject -ComputerName "PLYSCCM01" -Namespace "root/SMS/site_R01" -Query `
+(Get-WmiObject -ComputerName "SCCMSERVER" -Namespace "root/SMS/site_R01" -Query `
 "SELECT SMS_Collection.* FROM SMS_FullCollectionMembership, `
 SMS_Collection where name = '$MachineName' and `
 SMS_FullCollectionMembership.CollectionID = SMS_Collection.CollectionID") | `
