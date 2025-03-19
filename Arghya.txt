@@ -1,0 +1,354 @@
+
+
+#Connect-AzureAD
+#winget download --id 9pmmsr1cgpwg --skip-license --source msstore --accept-package-agreements --accept-source-agreements
+#winget download --id 9nmzlz57r3t7 --skip-license --source msstore --accept-package-agreements --accept-source-agreements
+#winget download --id 9n4wgh0z6vhq --skip-license --source msstore --accept-package-agreements --accept-source-agreements
+
+
+
+
+
+
+get-childitem env:*
+
+winget install --id XP9KKBZPXNJK0H --accept-package-agreements --accept-source-agreements
+
+
+Get-IntuneManagedDevice -Filter "contains(serialNumber,'PW08C9GH')"
+
+Set-Service -Name InstallService -StartupType automatic
+
+
+
+
+====================================================================================
+Get App version from Registry
+====================================================================================
+
+$Chrome = Get-ItemProperty HKLM:\Software\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* |  Where-Object {$_.DisplayName -like "*chrome*"}
+
+$Chrome.DisplayVersion
+
+====================================================================================
+
+ReinstallAll Store apps.
+
+Get-AppxPackage -allusers | foreach {Add-AppxPackage -register "$($_.InstallLocation)\appxmanifest.xml" -DisableDevelopmentMode}
+
+Authenticate proxy using powershell:
+$browser = New-Object System.Net.WebClient
+$browser.Proxy.Credentials =[System.Net.CredentialCache]::DefaultNetworkCredentials 
+
+====================================================================================
+Import MS Store app list
+====================================================================================
+
+$ExportFile = 'MS_Appx_List_' + $env:computername + "_" + (Get-Date -Format 'dd-MM-yyyy-HH-mm-ss') + '.txt'
+$Filepath = "C:\Temp"
+
+$ExportFile ="C:\Temp\MS_Appx_List_$($env:computername)_$(Get-Date -Format 'dd-MM-yyyy-HH-mm-ss').txt"
+$Device = "Device Name: $($env:computername)" | Out-File -Append -LiteralPath $ExportFile
+$user = "User: $([System.Security.Principal.WindowsIdentity]::GetCurrent().Name)" | Out-File -Append -LiteralPath $ExportFile
+$Time = "Date and Time: $(Get-Date -Format 'dd-MM-yyyy HH:mm:ss')" | Out-File -Append -LiteralPath $ExportFile
+Get-AppxPackage -Allusers | Select Name,Version | Out-File -Append -LiteralPath $ExportFile
+Get-AppxProvisionedPackage -Online | Select DisplayName,Version | Out-File -Append -LiteralPath $ExportFile
+
+====================================================================================
+Encode to base64 String / Convert to base64String
+====================================================================================
+$FileName = "C:\Temp\Beran\icon.ico"
+$base64string = [Convert]::ToBase64String([IO.File]::ReadAllBytes($FileName))
+$base64string | Out-File C:\Temp\base64string.txt
+
+#"C:\Temp\Beran\icon.ico" | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString | Out-File $Temp\Test.txt
+
+$FileContent = @'
+<base64string>
+'@
+
+====================================================================================
+Re-register the device having the issue with Azure AD
+====================================================================================
+
+
+A. Re-register the device having the issue with Azure AD (if you are not admin, kindly contact your admin to re-register your affected device with Azure AD)
+
+Press Windows + R to open the Run box.
+
+Type cmd in the box and hit Enter.
+
+On the Command Prompt window, type dsregcmd /leave and press Enter.
+
+Delete the MS-Organization-Access and MS-Organization-P2P-Access entries from the certificate store.
+
+Type dsregcmd /status in the Command Prompt and hit Enter.
+
+Now set the AzureAdJoined to NO.
+
+The process will unregister your device with Azure, and you can re-register it by following the steps below:
+
+Type Task Scheduler in the Windows Search box and launch it.
+
+Click the Task Scheduler Library and select Microsoft.
+
+Select the Windows option and tap on Workplace Join under it.
+
+Now, launch the Automatic-Device-Join task.
+
+B. Link the device to your work or school account
+
+It’s possible that your device is not properly connected with the Azure AD, hence, you should check Windows settings and link the device.
+
+Press Windows + I to open Settings on your computer.
+
+Select Accounts on the left pane and tap on Access work or school on the resulting page.
+
+Click on Connect in front of Add a work or school account and follow other on-screen prompts to connect your device with Azure.
+
+====================================================================================
+Decode from base64 String
+====================================================================================
+
+$FileName = "C:\Temp\icon.ico"
+$base64string = get-content "C:\Temp\base64string.txt"
+[IO.File]::WriteAllBytes($FileName, [Convert]::FromBase64String($base64string))
+
+====================================================================================
+Sent email using powershell
+====================================================================================
+
+try {
+    $Outlook = New-Object -ComObject Outlook.Application
+    $Mail = $Outlook.CreateItem(0)
+    $Mail.Subject = "Test Email"
+    $Mail.Body = "This is a test email sent from PowerShell script using Outlook."
+    $Mail.To = "email@domain.com"
+    $Mail.Send()
+    Write-Output "Email sent successfully."
+} catch {
+    Write-Error "Failed to send email. Error: $_"
+}
+====================================================================================
+
+====================================================================================
+
+
+
+
+
+
+
+
+ADD-ADGroupMember "Cus_MSDE_Win10_Computers" -members "DeviceName$"
+
+ADD-ADGroupMember "Windows10 Defender Migrated_Devices" -members "DeviceName$"
+
+Remove-ADGroupMember "GPO - SOE - COM - W10 - Commercial Vantage" -members "DeviceName$" -Confirm:$False
+
+ADD-ADGroupMember "GPO - SOE - COM - W10 - Commercial Vantage" -members "DeviceName$" -Confirm:$False
+
+Get-ADGroupMember -Identity 'GPO_SOE - COM - W10 - Enable Store Apps' -Recursive | select name
+
+Get-ADGroupMember -Identity 'Win7_Workstation_Administrators' -Recursive | Select-Object name,SamAccountName,objectClass,distinguishedName | Export-CSV -Path "C:\Temp\Win7_Workstation_Administrators.csv"
+
+((Get-ADComputer 'DeviceName' -properties memberof).MemberOf | get-adgroup).name
+
+((Get-ADuser 'SAMAccountName' -properties memberof).MemberOf | get-adgroup).name
+
+##Get-ADGroup -Filter {GroupScope -eq "DomainLocal"} | Get-ADGroupMember | Select-Object name, objectClass,distinguishedName
+
+
+====================================================================================
+Install nupkg
+====================================================================================
+
+Register-PSRepository -Name Local -SourceLocation C:\Temp\ps2exe.1.0.11 -InstallationPolicy Trusted
+
+Find-Module -Repository Local
+
+Install-Module -Name <YourModuleName>
+====================================================================================
+Suspend bitlocker and reboot
+====================================================================================
+Manage-bde -protectors -Disable C: -RebootCount 1
+Suspend-BitLocker -MountPoint "C:" -RebootCount 1
+
+====================================================================================
+Enable Bitlocker and save recovery key AD.
+====================================================================================
+manage-bde –on C:
+manage-bde.exe -protectors -add -recoverypassword C:
+manage-bde -protectors -adbackup c: -id {Enter Numerical Password ID by running "manage-bde.exe -protectors -get C:"}
+
+
+====================================================================================
+Unhide proxy settings powershell
+====================================================================================
+
+Get-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\internet explorer\Control Panel"
+
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\internet explorer\Control Panel" -Name "Connwiz Admin Lock" -Value 0
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\internet explorer\Control Panel" -Name "Connection Settings" -Value 0
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\internet explorer\Control Panel" -Name "AdvancedTab" -Value 0
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\internet explorer\Control Panel" -Name "SecurityTab" -Value 0
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\internet explorer\Control Panel" -Name "Proxy" -Value 0
+
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\internet explorer\Control Panel" -Name "SecurityTab" -Value 0
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\internet explorer\Control Panel" -Name "PrivacyTab" -Value 0
+
+====================================================================================
+Signing script
+====================================================================================
+
+$cert = New-SelfSignedCertificate -Subject "C=GB,E=arghya.biswas@edfenergy.com,CN=Arghya Biswas,OU=IT,DC=EDF,DC=Energy,DC=com" -Type CodeSigningCert -KeyAlgorithm 'RSA' -FriendlyName 'Code Signing' -KeyLength 2048 -KeyUsage 'DigitalSignature' -NotAfter (Get-Date).AddMonths(36) -CertStoreLocation cert:\CurrentUser\My
+$CertPassword = ConvertTo-SecureString -String 'FiRm,GSS0f_Prb%.o-8[ZY' -Force –AsPlainText
+Export-PfxCertificate -Cert "cert:\CurrentUser\My\$($cert.Thumbprint)" -FilePath "C:\Temp\test.pfx" -Password $CertPassword
+
+
+
+'C=GB,E=email@domain.com,CN=Arghya Biswas,OU=IT,DC=COMPANY,DC=Energy,DC=com'
+
+"Code Signing Certificate"
+
+Set-AuthenticodeSignature -FilePath "C:\Temp\Popup\EMD_Project_User_Notification_1.3.ps1" -Certificate $cert
+
+Get-AuthenticodeSignature "C:\Temp\Popup\EMD_Project_User_Notification_1.3.ps1"  | Format-List
+
+## SIGNING EXE ##
+signtool sign /a /fd SHA256 /tr http://timestamp.digicert.com /td SHA256 "C:\Temp\Popup\Project_User_Notification_1.3.exe"
+
+
+signtool.exe sign /f "C:\Temp\PCCream\cert_Managed TCO Device.p12" /fd SHA256 /d "Code Signing Certificate" /p "<enter Password>" /v /sha1 'zxcvbnmasdfghjklqwerty' /t "http://timestamp.digicert.com" "C:\Temp\PCCream\PHE_PCCream_1.5.1.85_R02_x86_EN_M.msi"
+
+====================================================================================
+List of collections for a machine in SCCM
+====================================================================================
+Import-Module ConfigurationManager
+
+cd R01:
+
+$MachineName = 'DeviceName'
+
+(Get-WmiObject -ComputerName "PLYSCCM01" -Namespace "root/SMS/site_R01" -Query `
+"SELECT SMS_Collection.* FROM SMS_FullCollectionMembership, `
+SMS_Collection where name = '$MachineName' and `
+SMS_FullCollectionMembership.CollectionID = SMS_Collection.CollectionID") | `
+Select Name >> C:\Temp\SCCM_Collections_$MachineName.txt
+
+
+
+====================================================================================
+Upgrade VMs
+====================================================================================
+
+start /wait "D:\setup.exe" /auto upgrade /DynamicUpdate disable /showoobe None /Telemetry Disable
+
+====================================================================================
+Intune deployment status 
+====================================================================================
+
+HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\IntuneManagementExtension\Win32Apps
+
+====================================================================================
+WINSXS folder cleanup
+====================================================================================
+
+dism /Online /Cleanup-Image /AnalyzeComponentStore
+Dism.exe /online /Cleanup-Image /StartComponentCleanup /ResetBase
+Dism.exe /online /Cleanup-Image /SPSuperseded
+
+====================================================================================
+Sysprep issue.
+====================================================================================
+HKEY_LOCAL_MACHINE\SYSTEM\Setup\Status\SysprepStatus\GeneralizationState\
+CleanupState:2
+GeneralizationState:7
+
+
+====================================================================================
+========================= Credential Manager clear =================================
+====================================================================================
+
+for /F "tokens=1,2 delims= " %G in ('cmdkey /list ^| findstr Target') do cmdkey /delete %H
+
+Get-AppLockerFileInformation "C:\PSA_1-3-2_LiMBR_Setup.msi" | Format-List
+
+icacls "C:\Program Files\Freedom Scientific" /grant Users:(OI)(CI)F /T
+
+====================================================================================
+Unblock files powershell
+Get-ChildItem -Path 'C:\Program Files\WindowsPowerShell\Modules\' -Recurse | Unblock-File
+====================================================================================
+
+##TURN OFF FIREWALL##
+netsh advfirewall set currentprofile state off
+
+##Allow only Remote Desktop##
+netsh advfirewall firewall set rule group=”remote desktop” new enable=Yes
+
+##Registry Changes to enable Remote Desktop##
+reg add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f
+===========================================================================================================================
+
+TEST MACHINE LENOVO: DT-S4MJ0538
+=====================================================================================
+
+rsop.msc
+
+When using the Resultant Set of Policy utility (rsop.msc), you can gather only computer-specific policy information: 
+Click Start, click Run, type mmc in the Open box, and then click OK.
+Click File, click Add/Remove Snapin, and then click Add in the Add/Remove dialog box.
+Click Resultant Set of Policy, click Add, and then click Close in the Add/Remove Standalone Snapin dialog box.
+Click OK in the Add/Remove dialog box. The Resultant Set of Policy snapin is displayed in the MMC.
+Click Generate RSOP data on the Action menu.
+Click Next, click Logging Mode, and then click Next.
+Click either This Computer or Another Computer, and then type the computer name.
+Click Select a specific user, and then click the blank space that is below the listed users. This has the same effect as clicking Do not display user policy settings in the results.
+Click Next, and then click Next. Note that only computer-specific settings are displayed.
+
+======================================================================================================
+
+======================================================================================================
+## DNS Query
+======================================================================================================
+
+dsquery GROUP -samid Adobe_Reader_11|dsget GROUP -memberof|dsget group -samid
+
+dsquery COMPUTER -name DeviceName | dsget COMPUTER -memberof | dsget group -samid
+dsquery COMPUTER -name DeviceName | dsget COMPUTER -memberof | dsget group -samid
+
+dsquery USER -samid SAMACCOUNTNAME |dsget USER -memberof|dsget group -samid
+dsquery GROUP -samid "IT Energy Production Support"|dsget GROUP -members|
+dsquery computer -name DeviceName
+
+dsquery computer -name DeviceName | dsget computer -memberof | dsget group -samid
+Regisrty
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Office\16.0\Common\OfficeUpdate" /v updatebranch /t REG_SZ /d Business
+
+========================================================================================================
+App-v Application Installation
+========================================================================================================
+Publish:
+-----------
+Set-ExecutionPolicy Unrestricted
+import-module appvclient
+Add-AppvClientPackage -Path "\\Server\Packages\YourPackage\Package.appv"
+Publish-AppvClientPackage -Name YourPackageName -Global
+
+Unpublish:
+------------
+Unpublish-AppvClientPackage -Name YourPackage -Global
+Remove-AppvClientPackage -Name YourPackageName
+
+
+====================================================================================
+Powershell execution policy
+====================================================================================
+Get-ExecutionPolicy -List
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+
+So the first step is to connect the Microsoft Graph with the correct scope. We are only going to retrieve user data, so we can use the User.Read.All scope.
+Connect-MgGraph -Scopes 'User.Read.All'
+
+====================================================================================
