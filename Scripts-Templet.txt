@@ -1,0 +1,251 @@
+Serial Number
+wmic bios get serialnumber
+
+rundll32.exe user32.dll, LockWorkStation
+
+Get-ChildItem -Path 'C:\Temp\EPEX_ComTrader_6.18.103' -Recurse | Unblock-File
+
+DISM /online /enable-feature /featurename:NetFX3 /All "C:\temp\SW_DVD9_Win_Pro_10_21H2.6_64BIT_Eng_Intl_Pro_Ent_EDU_N_MLF_X23-13843\sources\sxs" /LimitAccess
+
+
+icacls "C:\Program Files\Freedom Scientific" /grant Users:(OI)(CI)F /T
+
+Add-AppxProvisionedPackage -Online -SkipLicense -PackagePath .\Slack.msix
+
+================================================================================
+Last reboot Powershell
+================================================================================
+(Get-CimInstance -ClassName Win32_OperatingSystem).LastBootUpTime
+================================================================================
+
+powershell -Command "Start-Process powershell -Verb RunAs"
+
+powershell -Command "Start-Process cmd -Verb RunAs"
+
+runas /user:customer\svl_bisw15a "powershell.exe -NoExit -Command Start-Process cmd -Verb runAs"
+
+runas /user:customer\svl_bisw15a "powershell.exe -NoExit -Command Start-Process powershell -Verb runAs"
+
+runas /user:customer\svl_bisw15a "powershell.exe -NoExit -Command Start-Process powershell -Verb runAs"
+
+Intune app forward to Digital Workplace Deployment
+
+================================================================================
+Scearch Group in AD Powershell
+================================================================================
+
+Get-AdGroup -Filter "Name -like '*winscp*' `
+-and Name -notlike 'FLK*' -and Name -notlike 'AWS*' -and Name -notlike 'MBX*' -and Name -notlike 'PRX*' `
+-and Name -notlike 'SMS*' -and Name -notlike 'GPO*' -and Name -notlike 'GBL*' -and Name -notlike 'AP_*' `
+-and Name -notlike 'SOE*' -and Name -notlike 'GBM*' -and Name -notlike 'GBD*' -and Name -notlike 'GNU*' `
+-and Name -notlike 'FR*' -and Name -notlike 'FM*' -and Name -notlike 'CO-*' -and Name -notlike 'DNU*' `
+-and Name -notlike 'DIA*' -and Name -notlike 'Approval*' -and Name -notlike 'BC-*' -and Name -notlike 'Acc*' `
+-and Name -notlike 'UAT_*' -and Name -notlike 'CST-*' -and Name -notlike '^*' -and Name -notlike 'PN-*' `
+-and Name -notlike 'R-*' -and Name -notlike 'UC_*' -and Name -notlike 'PFADM-*' -and Name -notlike 'SWROLE-*' `
+-and Name -notlike 'SPOINT_*' -and Name -notlike 'WIN 7*' -and Name -notlike 'TCS_*' -and Name -notlike 'TCS*' `
+-and Name -notlike 'BC_*' -and Name -notlike 'GG-*' -and Name -notlike 'CIS_*'" | select Name
+
+================================================================================
+Execute powershell script hidden.
+================================================================================
+
+
+cmd /c start /min "" powershell -WindowStyle Hidden -Ex Bypass -File "C:\Temp\Taskbar_Icon_Remover.ps1"
+
+
+================================================================================
+Batch script with argument
+================================================================================
+
+If you require all arguments, then you can simply use %* in a batch script. %*refers to all the arguments (e.g. %1 %2 %3 %4 %5 …)
+if "%~1"=="Uninstall" goto :Uninstall
+echo Installing Screen Saver...
+XCopy "%~dp0Life-Saving-1.png" "%windir%\ScreenSaverImages" /S /E /I /Y
+XCopy "%~dp0Life-Saving-2.png" "%windir%\ScreenSaverImages" /S /E /I /Y
+IF %ERRORLEVEL%==0 echo Screen Saver installed successfully.
+GOTO :END
+
+:Uninstall
+echo Uninstalling Screen Saver...
+DEL "%windir%\ScreenSaverImages\Life-Saving-1.png" /F /Q
+DEL "%windir%\ScreenSaverImages\Life-Saving-2.png" /F /Q
+IF %ERRORLEVEL%==0 echo Screen Saver uninstalled successfully.
+GOTO :END
+
+:END
+EXIT %ERRORLEVEL%
+
+================================================================================
+Run as 64-bit process.
+================================================================================
+If ($ENV:PROCESSOR_ARCHITEW6432 -eq "AMD64") {
+    Try {
+&"$ENV:WINDIR\SysNative\WindowsPowershell\v1.0\PowerShell.exe" -File $PSCOMMANDPATH
+    }
+    Catch {
+        Throw "Failed to start $PSCOMMANDPATH"
+    }
+    Exit
+}
+
+================================================================================
+icacls "C:\Program Files\Freedom Scientific" /grant Users:(OI)(CI)F /T
+================================================================================
+File: XCopy "%~dp0TimKosse_FileZillaPro_3.33.0_R02_x64_EN_M.msi" "%ProgramData%\FileZillaPro" /S /E /I /Y
+Folder: XCopy /E /C /H /I /Y /V
+
+/V - Verifies the size of each new file.
+/Y - Suppresses prompting to confirm you want to overwrite an
+/E – Copy subdirectories, including any empty ones.
+/H - Copy files with hidden and system file attributes.
+/C - Continue copying even if an error occurs.
+/I - If in doubt, always assume the destination is a folder. e.g. when the destination does not exist.
+================================================================================
+:LOOP
+tasklist | find /i "TeklaStructures2018i_Help_enu.exe" >nul 2>&1
+IF ERRORLEVEL 1 (
+  GOTO CONTINUE
+) ELSE (
+  ECHO "Setup is still running"
+  Timeout /T 5 /Nobreak
+  waitfor Uninstallaing /t 10 >nul 2>&1
+  GOTO LOOP
+)
+:CONTINUE
+
+===============================================================================
+Batch script templet
+===============================================================================
+set msierror=%errorlevel%
+if %msierror%==0 goto :Misc
+if %msierror%==259 goto :Misc
+if %msierror%==1641 goto :Misc
+if %msierror%==3010 goto :Misc
+
+goto :ERROR
+
+
+:Misc
+
+@echo Successfully Installed Alteryx_RInstaller_3.4.4_EN_X86
+goto :Einde
+
+:ERROR
+@echo Error Code is %msierror% if exist %LogFile% type %LogFile%
+goto :Einde
+
+:Einde
+@echo Job ended at %date% %Time%
+Exit %msierror%
+
+:REBOOT
+Exit 0
+
+===============================================================================
+ %~dp0 to parent folder
+===============================================================================
+
+@echo off
+setlocal
+
+:: Get the current script directory
+set "currentDir=%~dp0"
+
+:: Remove the trailing backslash
+set "currentDir=%currentDir:~0,-1%"
+
+:: Extract the parent directory
+for %%i in ("%currentDir%") do set "parentDir=%%~dpi"
+
+:: Change to the parent directory
+cd /d "%parentDir%"
+:: echo %parentDir%
+
+:: Display the current directory
+:: echo Now in directory: %cd%
+
+:: echo "%parentDir%\Application\Build\setup.exe"
+CALL "%parentDir%Application\Build\setup.exe" --silent
+
+endlocal
+
+===============================================================================
+
+===============================================================================
+
+$Result = Start-Process $MSIEXEC -ArgumentList "/i $MSI TRANSFORMS=$MST DISABLEDESKTOPSHORTCUT=1 /l*v $MSILog /update $MSP /qn" -Wait -NoNewWindow -PassThru
+
+$MSIErrorCode = $Result.ExitCode
+
+        if (($MSIErrorCode -eq 0) -or ($MSIErrorCode -eq 3010) -or ($MSIErrorCode -eq 1641) -or ($MSIErrorCode -eq 259)){
+            Write-Host "$($ARPName) installed successfully with exitcode $($MSIErrorCode)."
+            }
+        else{
+            Write-Host "$($ARPName) installation failed with exitcode $($MSIErrorCode)."
+            }
+
+===============================================================================
+IF EXIST "C:\Users\Public\Desktop\Autodesk Design Review.lnk" DEL /F /Q "C:\Users\Public\Desktop\Autodesk Design Review.lnk"
+
+REM ============================= installing Pre Reqs =======================================
+REG QUERY "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{365CDECF-A11F-4518-BACC-17229D5E1626}"
+if %ERRORLEVEL%==0 (Echo Prerequisite already Installed) else ("%~dp0setup prerequisites.exe" /S /v/qn)
+
+================================ Block/Unblock files powershell =============================
+
+Powershell "get-childitem 'C:\Program Files (x86)\MarlanMaritime' -Recurse | Unblock-File"
+Set-Content 'C:\Temp\IRISSetup_latest_2\Install.bat' -Stream "Zone.Identifier" -Value "[ZoneTransfer]`nZoneId=3"
+
+============================= Installed Win32 app Powershell =======================================
+
+Get-WmiObject Win32_Product
+
+=====================================================================================================
+Find logged-on users powershell
+=====================================================================================================
+
+
+#========================== Variables =============================
+$ARPName = 'Notepad++'
+$NotepadSetup = Join-Path $PSScriptRoot 'npp.8.6.9.Installer.x64.exe'
+$XML = Join-Path $PSScriptRoot 'config.xml'
+$RequiredVersion = [Version]'8.6.9'
+
+#===================== End of Region ==============================
+Function Get-LoggedOnUser {
+    param (
+     [parameter(Mandatory=$False)]
+     [ValidateNotNullOrEmpty()]$ComputerName
+    )
+     
+ If($ComputerName -eq $Null) {
+    $Username = (Get-Process Explorer -IncludeUsername | Where-Object { $_.Username -notlike "*SYSTEM" }).Username
+    }
+Else {
+    $Username = (Invoke-Command {Get-Process Explorer -IncludeUsername | Where-Object { $_.Username -notlike "*SYSTEM" }} -ComputerName $ComputerName).Userna
+    }
+Return $Username.Split('\')[-1]
+}
+
+$user = Get-LoggedOnUser
+$Folder = "C:\Users\$user\AppData\Roaming\Notepad++"
+
+=====================================================================================================
+
+New-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -Name "ProxyOverride" -Value "login.live.com;account.live.com;clientconfig.passport.net;wustat.windows.com;*.windowsupdate.com;*.wns.windows.com;*.hotmail.com;*.outlook.com;*.microsoft.com;*.msftncsi.com" -Force
+
+Remove-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings" -Name ProxyOverride
+
+Get-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Internet Settings"
+
+=====================================================================================================
+systemui.exe
+=====================================================================================================
+
+$MyDir = [System.IO.Path]::GetDirectoryName($myInvocation.MyCommand.Definition)
+$scriptPath = $PSScriptRoot
+$ServiceUIPath = Join-Path $scriptPath "ServiceUI.exe"
+$PowershellPath = Join-Path $env:SystemRoot "system32\WindowsPowerShell\v1.0\powershell.exe"
+$NotificationScriptPath = Join-Path $scriptPath "User_Notification_v22.12.5622_Only_Install.ps1"
+
+$command = "$ServiceUIPath -Process:explorer.exe ""$PowershellPath"" -NoProfile -Nologo -WindowStyle Hidden -ExecutionPolicy Bypass -file ""$NotificationScriptPath"""
